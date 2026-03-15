@@ -28,7 +28,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
             <div className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity animate-fade-in" onClick={onClose}></div>
 
             <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
-                <div className="w-screen max-w-md">
+                     <div className="w-screen max-w-md h-full">
                     <div className="h-full flex flex-col bg-white dark:bg-gray-800 shadow-xl">
                         <div className="flex-1 min-h-0 py-6 overflow-y-auto px-4 sm:px-6">
                             <div className="flex items-start justify-between">
