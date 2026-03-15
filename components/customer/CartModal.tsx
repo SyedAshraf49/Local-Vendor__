@@ -30,7 +30,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
             <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
                 <div className="w-screen max-w-md">
                     <div className="h-full flex flex-col bg-white dark:bg-gray-800 shadow-xl">
-                        <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
+                        <div className="flex-1 min-h-0 py-6 overflow-y-auto px-4 sm:px-6">
                             <div className="flex items-start justify-between">
                                 <h2 className="text-lg font-medium text-gray-900 dark:text-white" id="slide-over-title">
                                     {t.cart}
