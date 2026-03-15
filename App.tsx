@@ -8,6 +8,7 @@ import { PreOrderProvider } from './context/PreOrderContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { ToastProvider } from './context/ToastContext';
 import { ProductProvider } from './context/ProductContext';
+import { ShoppingListProvider } from './context/ShoppingListContext';
 import Login from './components/Login';
 import CustomerDashboard from './components/customer/CustomerDashboard';
 import VendorDashboard from './components/vendor/VendorDashboard';
@@ -25,7 +26,9 @@ const App: React.FC = () => {
                 <FavoritesProvider>
                   <ToastProvider>
                     <ProductProvider>
-                      <Main />
+                      <ShoppingListProvider>
+                        <Main />
+                      </ShoppingListProvider>
                     </ProductProvider>
                   </ToastProvider>
                 </FavoritesProvider>
