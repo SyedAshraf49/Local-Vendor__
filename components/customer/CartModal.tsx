@@ -27,10 +27,10 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
             {/* Background overlay */}
             <div className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity animate-fade-in" onClick={onClose}></div>
 
-            <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex">
-                <div className="w-screen max-w-md" style={{ height: '100dvh' }}>
-                    <div className="h-full flex flex-col overflow-hidden bg-white dark:bg-gray-800 shadow-xl">
-                        <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
+            <div className="fixed inset-y-0 right-0 max-w-full pl-10 flex">
+                <div className="w-screen max-w-md h-full">
+                    <div className="h-full flex flex-col bg-white dark:bg-gray-800 shadow-xl overflow-hidden">
+                        <div className="px-4 sm:px-6 py-6">
                             <div className="flex items-start justify-between">
                                 <h2 className="text-lg font-medium text-gray-900 dark:text-white" id="slide-over-title">
                                     {t.cart}
@@ -44,41 +44,41 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="mt-8">
-                                <div className="flow-root">
-                                    {cartItems.length > 0 ? (
-                                        <ul role="list" className="-my-6 divide-y divide-gray-200 dark:divide-gray-700">
-                                            {cartItems.map((item) => (
-                                                <li key={item.id} className="py-6 flex">
-                                                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
-                                                        <ProductIcon category={item.category} productName={item.name} containerClassName="h-full w-full" className="h-12 w-12" />
-                                                    </div>
+                        <div className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-6">
+                            <div className="flow-root pb-6">
+                                {cartItems.length > 0 ? (
+                                    <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
+                                        {cartItems.map((item) => (
+                                            <li key={item.id} className="py-6 flex">
+                                                <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
+                                                    <ProductIcon category={item.category} productName={item.name} containerClassName="h-full w-full" className="h-12 w-12" />
+                                                </div>
 
-                                                    <div className="ml-4 flex-1 flex flex-col">
-                                                        <div>
-                                                            <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
-                                                                <h3>{item.name}</h3>
-                                                                <p className="ml-4">₹{(item.offer ? item.offer.newPrice : item.price).toFixed(2)}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex-1 flex items-end justify-between text-sm">
-                                                            <p className="text-gray-500 dark:text-gray-400">Qty: {item.quantity.toFixed(item.unit === 'pcs' ? 0 : 2)} {item.unit}</p>
-
-                                                            <div className="flex">
-                                                                <button onClick={() => removeFromCart(item.id)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                                    <TrashIcon className="h-5 w-5" />
-                                                                </button>
-                                                            </div>
+                                                <div className="ml-4 flex-1 flex flex-col">
+                                                    <div>
+                                                        <div className="flex justify-between text-base font-medium text-gray-900 dark:text-white">
+                                                            <h3>{item.name}</h3>
+                                                            <p className="ml-4">₹{(item.offer ? item.offer.newPrice : item.price).toFixed(2)}</p>
                                                         </div>
                                                     </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p className="text-center text-gray-500 dark:text-gray-400">{t.emptyCart}</p>
-                                    )}
-                                </div>
+                                                    <div className="flex-1 flex items-end justify-between text-sm">
+                                                        <p className="text-gray-500 dark:text-gray-400">Qty: {item.quantity.toFixed(item.unit === 'pcs' ? 0 : 2)} {item.unit}</p>
+
+                                                        <div className="flex">
+                                                            <button onClick={() => removeFromCart(item.id)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                                <TrashIcon className="h-5 w-5" />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p className="text-center text-gray-500 dark:text-gray-400">{t.emptyCart}</p>
+                                )}
                             </div>
                         </div>
 
