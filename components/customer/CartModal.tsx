@@ -51,7 +51,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                 {cartItems.length > 0 ? (
                                     <ul role="list" className="divide-y divide-gray-200 dark:divide-gray-700">
                                         {cartItems.map((item) => (
-                                            <li key={item.id} className="py-6 flex">
+                                            <li key={`${item.id}-${item.location}`} className="py-6 flex">
                                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
                                                     <ProductIcon category={item.category} productName={item.name} containerClassName="h-full w-full" className="h-12 w-12" />
                                                 </div>
@@ -67,7 +67,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                                         <p className="text-gray-500 dark:text-gray-400">Qty: {item.quantity.toFixed(item.unit === 'pcs' ? 0 : 2)} {item.unit}</p>
 
                                                         <div className="flex">
-                                                            <button onClick={() => removeFromCart(item.id)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                            <button onClick={() => removeFromCart(item.id, item.location)} type="button" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                                 <TrashIcon className="h-5 w-5" />
                                                             </button>
                                                         </div>

@@ -6,7 +6,7 @@ const CART_STORAGE_KEY = 'local-connect-cart-items';
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity: number) => void;
-  removeFromCart: (productId: number) => void;
+  removeFromCart: (productId: number, productLocation: Product['location']) => void;
   clearCart: () => void;
   cartTotal: number;
 }
@@ -28,25 +28,35 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = useCallback((product: Product, quantity: number) => {
     setCartItems((prevItems) => {
-      const itemInCart = prevItems.find((item) => item.id === product.id);
+      const itemInCart = prevItems.find(
+        (item) => item.id === product.id && item.location === product.location
+      );
       if (itemInCart) {
         return prevItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+          item.id === product.id && item.location === product.location
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
         );
       }
       return [...prevItems, { ...product, quantity }];
     });
   }, []);
 
-  const removeFromCart = useCallback((productId: number) => {
+  const removeFromCart = useCallback((productId: number, productLocation: Product['location']) => {
     setCartItems((prevItems) => {
-      const itemInCart = prevItems.find((item) => item.id === productId);
+      const itemInCart = prevItems.find(
+        (item) => item.id === productId && item.location === productLocation
+      );
       if (itemInCart && itemInCart.quantity > 1) {
         return prevItems.map((item) =>
-          item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+          item.id === productId && item.location === productLocation
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
         );
       }
-      return prevItems.filter((item) => item.id !== productId);
+      return prevItems.filter(
+        (item) => !(item.id === productId && item.location === productLocation)
+      );
     });
   }, []);
 
