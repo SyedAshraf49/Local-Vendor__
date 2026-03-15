@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
 import { type CartItem, type Product } from '../types';
 
+const CART_STORAGE_KEY = 'local-connect-cart-items';
+
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity: number) => void;
@@ -12,7 +14,17 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const storedItems = window.localStorage.getItem(CART_STORAGE_KEY);
+      if (!storedItems) return [];
+      const parsedItems = JSON.parse(storedItems) as CartItem[];
+      return Array.isArray(parsedItems) ? parsedItems : [];
+    } catch {
+      return [];
+    }
+  });
 
   const addToCart = useCallback((product: Product, quantity: number) => {
     setCartItems((prevItems) => {
@@ -46,6 +58,15 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const price = item.offer ? item.offer.newPrice : item.price;
     return total + price * item.quantity;
   }, 0);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    } catch {
+      // Ignore storage write failures (e.g., private mode quota issues).
+    }
+  }, [cartItems]);
 
   return (
     <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, cartTotal }}>

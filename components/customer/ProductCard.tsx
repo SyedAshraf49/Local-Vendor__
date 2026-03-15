@@ -223,6 +223,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
                 <button onClick={handleIncrement} disabled={isExpired} className="p-2 text-gray-600 dark:text-gray-300 disabled:opacity-50 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 rounded-r-md"><PlusIcon className="h-4 w-4"/></button>
             </div>
             <button
+                type="button"
                 onClick={handleAddToCart}
                 disabled={isExpired || justAdded}
                 className={`flex-grow py-2 px-3 rounded-md font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-sm flex items-center justify-center ${
