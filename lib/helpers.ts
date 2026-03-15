@@ -1,6 +1,18 @@
 
 import { type Location } from '../types';
 
+export const parseDateOnly = (value: string): Date => {
+  const [year, month, day] = value.split('-').map(Number);
+
+  if ([year, month, day].every(Number.isFinite)) {
+    return new Date(year, month - 1, day);
+  }
+
+  const parsedDate = new Date(value);
+  parsedDate.setHours(0, 0, 0, 0);
+  return parsedDate;
+};
+
 // Haversine formula to calculate distance between two lat/lng points
 export const getDistance = (loc1: Location, loc2: Location): number => {
   const R = 6371; // Radius of the Earth in km

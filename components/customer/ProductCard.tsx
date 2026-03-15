@@ -9,6 +9,7 @@ import { useTranslations } from '../../hooks/useTranslations';
 import { useToast } from '../../context/ToastContext';
 import { StarIcon, PlusIcon, LocationMarkerIcon, MinusIcon, CheckIcon, BookOpenIcon, HeartIcon, CalendarDaysIcon } from '../common/Icons';
 import ProductIcon from './ProductIcon';
+import { parseDateOnly } from '../../lib/helpers';
 
 interface ProductCardProps {
   product: Product;
@@ -48,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index }) => {
     setInputValue(quantity.toFixed(product.unit === 'pcs' ? 0 : 2));
   }, [quantity, product.unit]);
 
-  const expiryDate = new Date(product.expiryDate);
+  const expiryDate = parseDateOnly(product.expiryDate);
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Normalize for accurate day comparison
   

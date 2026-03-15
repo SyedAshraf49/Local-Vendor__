@@ -2,13 +2,17 @@ import React, { useMemo } from 'react';
 import { useTranslations } from '../../hooks/useTranslations';
 import ProductCard from './ProductCard';
 import { useProducts } from '../../context/ProductContext';
+import { parseDateOnly } from '../../lib/helpers';
 
 const FeaturedProducts: React.FC = () => {
     const t = useTranslations();
     const { products } = useProducts();
 
     const featured = useMemo(() => {
-        return products.filter(p => p.offer && new Date(p.expiryDate) >= new Date());
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        return products.filter(p => p.offer && parseDateOnly(p.expiryDate) >= today);
     }, [products]);
 
     if (featured.length === 0) {

@@ -4,6 +4,7 @@ import { useTranslations } from '../../hooks/useTranslations';
 import ProductCard from './ProductCard';
 import ProductSkeleton from './ProductSkeleton';
 import { useProducts } from '../../context/ProductContext';
+import { parseDateOnly } from '../../lib/helpers';
 
 const ProductList: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -15,19 +16,25 @@ const ProductList: React.FC = () => {
     const categories: (Product['category'] | 'all')[] = ['all', 'vegetables', 'fruits', 'dairy', 'chocolates', 'newspapers'];
     
     const filteredProducts = useMemo(() => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        return products
+            .filter(product => {
+                const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+            })
+            .sort((leftProduct, rightProduct) => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
 
-        return products.filter(product => {
-            const expiryDate = new Date(product.expiryDate);
-            if (expiryDate < today) {
-                return false; // Filter out expired products
-            }
+                const leftIsExpired = parseDateOnly(leftProduct.expiryDate) < today;
+                const rightIsExpired = parseDateOnly(rightProduct.expiryDate) < today;
 
-            const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-            const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-            return matchesCategory && matchesSearch;
-        });
+                if (leftIsExpired === rightIsExpired) {
+                    return leftProduct.name.localeCompare(rightProduct.name);
+                }
+
+                return leftIsExpired ? 1 : -1;
+            });
     }, [products, searchTerm, selectedCategory]);
 
     return (
