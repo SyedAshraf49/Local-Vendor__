@@ -58,9 +58,13 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             : item
         );
       }
+<<<<<<< HEAD
       return prevItems.filter(
         (item) => !isSameCartItem(item, productIdentity)
       );
+=======
+      return prevItems.filter((item) => !isSameCartItem(item, productIdentity));
+>>>>>>> 132e950 (Fix cart missing items with stable identity and scroll layout)
     });
   }, []);
 
