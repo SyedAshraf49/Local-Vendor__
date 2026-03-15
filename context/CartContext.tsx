@@ -6,10 +6,17 @@ const CART_STORAGE_KEY = 'local-connect-cart-items';
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity: number) => void;
-  removeFromCart: (productId: number, productLocation: Product['location']) => void;
+  removeFromCart: (productId: number, productLocation: Product['location'], productName: string) => void;
   clearCart: () => void;
   cartTotal: number;
 }
+
+const isSameCartItem = (
+  item: Pick<CartItem, 'id' | 'location' | 'name'>,
+  product: Pick<Product, 'id' | 'location' | 'name'>
+) => {
+  return item.id === product.id && item.location === product.location && item.name === product.name;
+};
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -28,12 +35,10 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addToCart = useCallback((product: Product, quantity: number) => {
     setCartItems((prevItems) => {
-      const itemInCart = prevItems.find(
-        (item) => item.id === product.id && item.location === product.location
-      );
+      const itemInCart = prevItems.find((item) => isSameCartItem(item, product));
       if (itemInCart) {
         return prevItems.map((item) =>
-          item.id === product.id && item.location === product.location
+          isSameCartItem(item, product)
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
@@ -42,20 +47,19 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   }, []);
 
-  const removeFromCart = useCallback((productId: number, productLocation: Product['location']) => {
+  const removeFromCart = useCallback((productId: number, productLocation: Product['location'], productName: string) => {
+    const productIdentity = { id: productId, location: productLocation, name: productName };
     setCartItems((prevItems) => {
-      const itemInCart = prevItems.find(
-        (item) => item.id === productId && item.location === productLocation
-      );
+      const itemInCart = prevItems.find((item) => isSameCartItem(item, productIdentity));
       if (itemInCart && itemInCart.quantity > 1) {
         return prevItems.map((item) =>
-          item.id === productId && item.location === productLocation
+          isSameCartItem(item, productIdentity)
             ? { ...item, quantity: item.quantity - 1 }
             : item
         );
       }
       return prevItems.filter(
-        (item) => !(item.id === productId && item.location === productLocation)
+        (item) => !isSameCartItem(item, productIdentity)
       );
     });
   }, []);
